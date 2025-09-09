@@ -230,7 +230,6 @@
   </ul>
 </nav>
 
-
 <h1 class="titulo"> Carrito de Compras</h1>
 
 <table aria-label="Carrito de compras">
@@ -250,20 +249,19 @@
 
 <p class="total" id="total">Total: $0</p>
 
-<div class="botones-container">
-  <button class="vaciar" type="button" onclick="vaciarCarrito()">Vaciar</button>
-  <button class="comprar" type="button" onclick="procesarCompra()" id="btn-comprar">
+<ul class="botones-container" role="list">
+  <li><button class="vaciar" type="button" onclick="vaciarCarrito()">Vaciar</button></li>
+  <li><button class="comprar" type="button" onclick="procesarCompra()" id="btn-comprar">
     💳 Comprar Ahora
-  </button>
-</div>
+  </button></li>
+</ul>
 
-<!-- Solo mensaje flotante para notificaciones -->
-<span id="mensaje-flotante" role="alert" aria-live="assertive"></span>
-<div id="modal-compra" class="modal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="cerrarModal()">&times;</button>
-    <h2 style="color: #16a34a; margin-bottom: 1rem;">¡Compra Exitosa! 🎉</h2>
-    <p>Tu pedido ha sido procesado correctamente.</p>
+<!-- Modal -->
+<section id="modal-compra" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+  <article class="modal-content">
+    <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar modal">&times;</button>
+    <h2 id="modal-title" style="color: #16a34a; margin-bottom: 1rem;">¡Compra Exitosa! 🎉</h2>
+    <p id="modal-desc">Tu pedido ha sido procesado correctamente.</p>
     <p><strong>Total pagado: <span id="total-modal">$0</span></strong></p>
     <p style="margin: 1rem 0; color: #666; font-size: 0.9rem;">
       Recibirás un email de confirmación en breve con los detalles de tu pedido.
@@ -271,10 +269,10 @@
     <button onclick="cerrarModal()" style="background-color: #16a34a; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem;">
       Cerrar
     </button>
-  </div>
-</div>
+  </article>
+</section>
 
-<div id="mensaje-flotante" role="alert" aria-live="assertive"></div>
+<span id="mensaje-flotante" role="alert" aria-live="assertive"></span>
 
 <script>
   let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
