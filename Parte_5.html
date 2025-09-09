@@ -1,0 +1,158 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Seguimiento de Pedido y Envío</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('https://i.pinimg.com/1200x/ee/07/57/ee0757056c5f74eb6a3948bfe38d8f13.jpg') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #333;
+      padding: 10px 0;
+    }
+
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: #4CAF50;
+    }
+
+    main {
+      background: white;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    section {
+      margin-top: 30px;
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    .status p {
+      padding: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .status .active {
+      background: #4CAF50;
+      color: white;
+      font-weight: bold;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1976D2;
+    }
+
+    .boleta-btn {
+      background: #4CAF50;
+    }
+
+    input[type="date"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="Parte_1.html">Inicio</a></li>
+    <li><a href="Parte_2.html" class="active">Productos</a></li>
+    <li><a href="Parte_3.html">Perfiles</a></li>
+    <li><a href="Parte_4.html">Carrito de Compra</a></li>
+    <li><a href="Parte_5.html">Pedidos y Envios</a></li>
+    <li><a href="Parte_6.html">Contacto</a></li>
+    <li><a href="Parte_7.html">Registrarse</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h2>Procesamiento y Seguimiento de Pedidos</h2>
+
+  <section>
+    <p><strong>N° de Pedido:</strong> #123456</p>
+    <p><strong>Cliente:</strong> Juan Pérez</p>
+  </section>
+
+  <section class="status" id="estadoPedido">
+    <p class="active">Pedido Confirmado</p>
+    <p>En Preparación</p>
+    <p>Listo para Envío</p>
+    <p>En Camino</p>
+    <p>Entregado</p>
+  </section>
+
+  <button onclick="actualizarEstado()">Actualizar Estado del Pedido</button>
+  <br><br>
+
+  <a href="boleta.pdf" download>
+    <button class="boleta-btn">Descargar Boleta</button>
+  </a>
+
+  <section>
+    <h2>Gestión de Envíos</h2>
+    <p><strong>Estado del Envío:</strong> <span id="estadoEnvio">Centro de distribución</span></p>
+    <p><strong>Ubicación Actual:</strong> <span id="ubicacionActual">Santiago, Chile</span></p>
+    <button onclick="simularEnvio()">Actualizar Seguimiento en Tiempo Real</button>
+  </section>
+
+  <section>
+    <h3>Selecciona tu Fecha de Entrega Preferida:</h3>
+    <input type="date" id="fechaEntrega">
+    <button onclick="guardarFecha()">Guardar Fecha</button>
+    <p id="fechaConfirmada"></p>
+  </section>
+</main>
+
+<!-- Enlace al archivo JavaScript externo -->
+<script src="registros.js"></script>
+
+</body>
+</html>
+

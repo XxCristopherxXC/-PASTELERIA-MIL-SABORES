@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carrito de Compras - Pastelería Mil Sabores</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1486427944299-d1955d23e34d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: rgba(5, 1, 15, 0.85);
+      padding: 1rem 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-wrap: wrap;
+    }
+    nav li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.3s ease;
+    }
+    nav li a:hover,
+    nav li a.active {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    .titulo {
+      background-color: #1e293bcc;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      backdrop-filter: blur(5px);
+      border-radius: 0 0 12px 12px;
+      margin-bottom: 1rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    th,
+    td {
+      padding: 0.75rem;
+      text-align: center;
+      border-bottom: 1px solid #e5e7eb;
+      color: #1e293b;
+    }
+    th {
+      background-color: #f3f4f6;
+      font-weight: 600;
+    }
+    button.btn {
+      padding: 0.3rem 0.6rem;
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button.btn:hover {
+      background-color: #dc2626;
+    }
+    .total {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: right;
+      padding: 1rem;
+      max-width: 960px;
+      margin-left: auto;
+      margin-right: auto;
+      color: white;
+      text-shadow: 0 0 5px rgba(0,0,0,0.7);
+    }
+    .botones-container {
+      max-width: 960px;
+      margin: 1rem auto 2rem auto;
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    button.vaciar {
+      background-color: #013b9f;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+    button.vaciar:hover {
+      background-color: #013b9f;
+    }
+    button.comprar {
+      background-color: #16a34a;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: block;
+      max-width: 960px;
+      margin: 0 auto 2rem auto;
+      text-align: right;
+    }
+    button.comprar:hover {
+      background-color: #15803d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+    }
+    button.comprar:disabled {
+      background-color: #013b9f;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    input[type=number] {
+      width: 60px;
+      text-align: center;
+      border: 1px solid #0650c0;
+      border-radius: 4px;
+      padding: 0.2rem;
+    }
+    /* Mensaje flotante */
+    #mensaje-flotante {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background-color: #22c55e;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+    #mensaje-flotante.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      animation: modalSlide 0.3s ease;
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="Parte_1.html">Inicio</a></li>
+    <li><a href="Parte_2.html" class="active">Productos</a></li>
+    <li><a href="Parte_3.html">Perfiles</a></li>
+    <li><a href="Parte_4.html">Carrito de Compra</a></li>
+    <li><a href="Parte_5.html">Pedidos y Envios</a></li>
+    <li><a href="Parte_6.html">Contacto</a></li>
+    <li><a href="Parte_7.html">Registrarse</a></li>
+  </ul>
+</nav>
+
+
+<h1 class="titulo"> Carrito de Compras</h1>
+
+<table aria-label="Carrito de compras">
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Precio</th>
+      <th>Cantidad</th>
+      <th>Subtotal</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody id="carrito-body">
+    <!-- Productos del carrito -->
+  </tbody>
+</table>
+
+<p class="total" id="total">Total: $0</p>
+
+<div class="botones-container">
+  <button class="vaciar" type="button" onclick="vaciarCarrito()">Vaciar</button>
+  <button class="comprar" type="button" onclick="procesarCompra()" id="btn-comprar">
+    💳 Comprar Ahora
+  </button>
+</div>
+
+<!-- Solo mensaje flotante para notificaciones -->
+<span id="mensaje-flotante" role="alert" aria-live="assertive"></span>
+<div id="modal-compra" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="cerrarModal()">&times;</button>
+    <h2 style="color: #16a34a; margin-bottom: 1rem;">¡Compra Exitosa! 🎉</h2>
+    <p>Tu pedido ha sido procesado correctamente.</p>
+    <p><strong>Total pagado: <span id="total-modal">$0</span></strong></p>
+    <p style="margin: 1rem 0; color: #666; font-size: 0.9rem;">
+      Recibirás un email de confirmación en breve con los detalles de tu pedido.
+    </p>
+    <button onclick="cerrarModal()" style="background-color: #16a34a; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem;">
+      Cerrar
+    </button>
+  </div>
+</div>
+
+<div id="mensaje-flotante" role="alert" aria-live="assertive"></div>
+
+<script>
+  let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+  function renderCarrito() {
+    const tbody = document.getElementById('carrito-body');
+    const totalEl = document.getElementById('total');
+    const btnComprar = document.getElementById('btn-comprar');
+    tbody.innerHTML = '';
+
+    if (carrito.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:1rem;">El carrito está vacío.</td></tr>';
+      totalEl.textContent = 'Total: $0';
+      btnComprar.disabled = true;
+      return;
+    }
+
+    let total = 0;
+    btnComprar.disabled = false;
+
+    carrito.forEach((item, index) => {
+      const subtotal = item.precio * item.cantidad;
+      total += subtotal;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:left; display:flex; align-items:center; gap:0.5rem;">
+          <img src="${item.imagen || 'https://via.placeholder.com/50'}" alt="${item.nombre}" width="50" height="50" style="border-radius:6px; object-fit:cover;" />
+          <span>
+            <strong>${item.nombre}</strong><br>
+            <span style="font-size:0.85rem; color:#555;">Tamaño: ${item.tamaño || 'Mediana'}</span><br>
+            <span style="font-size:0.8rem; font-style:italic; color:#777;">${item.mensaje || ''}</span>
+          </span>
+        </td>
+        <td>${item.precio.toLocaleString()}</td>
+        <td>
+          <input type="number" min="1" value="${item.cantidad}" aria-label="Cantidad de ${item.nombre}" onchange="cambiarCantidad(${index}, this.value)" />
+        </td>
+        <td>${subtotal.toLocaleString()}</td>
+        <td>
+          <button class="btn" type="button" onclick="eliminarProducto(${index})" aria-label="Eliminar ${item.nombre}">Eliminar</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    totalEl.textContent = `Total: $${total.toLocaleString()}`;
+  }
+
+  function cambiarCantidad(index, nuevaCantidad) {
+    nuevaCantidad = parseInt(nuevaCantidad);
+    if (isNaN(nuevaCantidad) || nuevaCantidad < 1) return;
+    carrito[index].cantidad = nuevaCantidad;
+    guardarYRenderizar();
+  }
+
+  function eliminarProducto(index) {
+    carrito.splice(index, 1);
+    guardarYRenderizar();
+  }
+
+  function vaciarCarrito() {
+    if (confirm('¿Estás seguro de vaciar el carrito?')) {
+      carrito = [];
+      guardarYRenderizar();
+    }
+  }
+
+  function procesarCompra() {
+    if (carrito.length === 0) {
+      mostrarMensaje('El carrito está vacío', 'error');
+      return;
+    }
+
+    const total = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+
+    document.getElementById('total-modal').textContent = `$${total.toLocaleString()}`;
+    document.getElementById('modal-compra').classList.add('show');
+    setTimeout(() => {
+      carrito = [];
+      guardarYRenderizar();
+      mostrarMensaje('¡Gracias por tu compra!', 'success');
+    }, 1000);
+  }
+
+  function cerrarModal() {
+    document.getElementById('modal-compra').classList.remove('show');
+  }
+
+  function guardarYRenderizar() {
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    renderCarrito();
+  }
+
+  function mostrarMensaje(texto, tipo = 'success') {
+    const mensaje = document.getElementById('mensaje-flotante');
+    mensaje.textContent = texto;
+    mensaje.style.backgroundColor = tipo === 'error' ? '#ef4444' : '#22c55e';
+    mensaje.classList.add('show');
+    setTimeout(() => {
+      mensaje.classList.remove('show');
+    }, 3000);
+  }
+
+  // Cerrar modal al hacer clic fuera de él
+  document.getElementById('modal-compra').addEventListener('click', function(e) {
+    if (e.target === this) {
+      cerrarModal();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCarrito();
+  });
+</script>
+
+</body>
+</html>

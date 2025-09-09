@@ -1,63 +1,143 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('registro-form');
+// ==========================
+// CARRITO DE COMPRAS
+// ==========================
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault(); 
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
-    const nombre = document.getElementById('nombre').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const fechaNacimientoInput = document.getElementById('fecha-nacimiento').value;
-    const codigoDescuento = document.getElementById('codigo-descuento').value.trim();
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
+function agregarAlCarrito(nombre, precio) {
+  const index = carrito.findIndex(item => item.nombre === nombre);
+  if (index !== -1) {
+    carrito[index].cantidad++;
+  } else {
+    carrito.push({ nombre, precio, cantidad: 1 });
+  }
+  guardarYRenderizar();
+}
 
-    if (!fechaNacimientoInput) {
-      alert('Por favor ingresa tu fecha de nacimiento.');
-      return;
-    }
+function renderCarrito() {
+  const tbody = document.getElementById('carrito-body');
+  const totalEl = document.getElementById('total');
+  if (!tbody || !totalEl) return;
 
-    if (password !== confirmPassword) {
-      alert('Las contraseñas no coinciden.');
-      return;
-    }
+  tbody.innerHTML = '';
+  let total = 0;
 
-    const fechaNacimiento = new Date(fechaNacimientoInput);
-    const hoy = new Date();
+  carrito.forEach((producto, index) => {
+    const subtotal = producto.precio * producto.cantidad;
+    total += subtotal;
 
-    let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
-    const mes = hoy.getMonth() - fechaNacimiento.getMonth();
-    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
-      edad--;
-    }
-
-    let descuento50 = edad >= 50;
-    let descuento10 = codigoDescuento.toUpperCase() === 'FELICES50';
-
-    let tortaGratis = false;
-    if (email.endsWith('@duoc.cl')) {
-      if (hoy.getMonth() === fechaNacimiento.getMonth() && hoy.getDate() === fechaNacimiento.getDate()) {
-        tortaGratis = true;
-      }
-    }
-
-    let mensaje = `¡Registro exitoso, ${nombre}!\n\n`;
-
-    if (descuento50) {
-      mensaje += '- Tienes un 50% de descuento por ser mayor de 50 años.\n';
-    }
-    if (descuento10) {
-      mensaje += '- Tienes un 10% de descuento de por vida con el código "FELICES50".\n';
-    }
-    if (tortaGratis) {
-      mensaje += '- ¡Felicidades! Tienes derecho a una torta gratis por tu cumpleaños y ser estudiante Duoc.\n';
-    }
-    if (!descuento50 && !descuento10 && !tortaGratis) {
-      mensaje += '- No tienes descuentos especiales por el momento.\n';
-    }
-
-    alert(mensaje);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${producto.nombre}</td>
+      <td>$${producto.precio.toLocaleString()}</td>
+      <td>
+        <input type="number" min="1" value="${producto.cantidad}" aria-label="Cantidad de ${producto.nombre}" onchange="cambiarCantidad(${index}, this.value)" />
+      </td>
+      <td>$${subtotal.toLocaleString()}</td>
+      <td><button class="btn" type="button" onclick="eliminarProducto(${index})">Eliminar</button></td>
+    `;
+    tbody.appendChild(tr);
   });
-  //---------------------------------------------------------------------------------------------------------------
-  ///--------------------------------------------------------------------------------------------------------------
-  
+
+  totalEl.textContent = 'Total: $' + total.toLocaleString();
+}
+
+function cambiarCantidad(index, nuevaCantidad) {
+  nuevaCantidad = parseInt(nuevaCantidad);
+  if (isNaN(nuevaCantidad) || nuevaCantidad < 1) return;
+  carrito[index].cantidad = nuevaCantidad;
+  guardarYRenderizar();
+}
+
+function eliminarProducto(index) {
+  carrito.splice(index, 1);
+  guardarYRenderizar();
+}
+
+function vaciarCarrito() {
+  if (confirm('¿Estás seguro de vaciar el carrito?')) {
+    carrito = [];
+    guardarYRenderizar();
+  }
+}
+
+function guardarYRenderizar() {
+  localStorage.setItem('carrito', JSON.stringify(carrito));
+  renderCarrito();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderCarrito();
+
+  // Página de productos (Parte_2.html)
+  if (document.querySelector('main.catalogo')) {
+    const botonesAgregar = document.querySelectorAll('.btn-agregar');
+    botonesAgregar.forEach((boton) => {
+      boton.addEventListener('click', () => {
+        const productoEl = boton.closest('article.producto');
+        const nombre = productoEl.querySelector('h3').textContent.trim();
+
+        let precioBase = 500;
+
+        const selectTam = productoEl.querySelector('select');
+        const tamaño = selectTam ? selectTam.value.toLowerCase() : 'mediana';
+
+        if (tamaño === 'pequeña') precioBase = 400;
+        else if (tamaño === 'mediana') precioBase = 500;
+        else if (tamaño === 'grande') precioBase = 700;
+
+        agregarAlCarrito(nombre, precioBase);
+        alert(`Agregaste ${nombre} (${tamaño}) al carrito`);
+      });
+    });
+  }
 });
+let estadoIndex = 0;
+const estadosPedido = document.querySelectorAll('#estadoPedido p');
+
+function actualizarEstado() {
+  if (estadoIndex < estadosPedido.length - 1) {
+    estadosPedido[estadoIndex].classList.remove('active');
+    estadoIndex++;
+    estadosPedido[estadoIndex].classList.add('active');
+  } else {
+    alert("El pedido ya fue entregado.");
+  }
+}
+
+const ubicaciones = [
+  "Centro de distribución",
+  "En camino - Región Metropolitana",
+  "Llegando a destino",
+  "Entregado"
+];
+
+const ubicacionesFisicas = [
+  "Santiago, Chile",
+  "Maipú, RM",
+  "Puente Alto, RM",
+  "Dirección del cliente"
+];
+
+let envioIndex = 0;
+
+function simularEnvio() {
+  if (envioIndex < ubicaciones.length - 1) {
+    envioIndex++;
+    document.getElementById("estadoEnvio").textContent = ubicaciones[envioIndex];
+    document.getElementById("ubicacionActual").textContent = ubicacionesFisicas[envioIndex];
+  } else {
+    alert("El paquete ya fue entregado.");
+  }
+}
+
+function guardarFecha() {
+  const fecha = document.getElementById("fechaEntrega").value;
+  if (fecha) {
+    document.getElementById("fechaConfirmada").textContent = "Fecha preferida de entrega: " + fecha;
+  } else {
+    alert("Por favor selecciona una fecha.");
+  }
+}
+
+
