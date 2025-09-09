@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Catálogo de Productos - Parte 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://i.pinimg.com/736x/13/9e/ed/139eed838eacada3b7edc7d6a23306ab.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background-color: rgba(5, 1, 15, 0.85);
+            padding: 1rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        nav li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        nav li a.active,
+        nav li a:hover {
+            background-color: #04090e;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+        }
+
+        .filtros {
+            max-width: 800px;
+            margin: 1rem auto 0 auto;
+            background-color: rgba(5, 1, 15, 0.75);
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .filtros label {
+            color: #ffffff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filtros select {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 1px solid #ffffff;
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filtros select:focus {
+            outline: none;
+            border-color: #ffffff;
+        }
+
+        main.catalogo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 1rem 20px 40px;
+            max-width: 960px;
+            margin: 0 auto 40px;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        article.producto {
+            border: 1px solid #ffffff;
+            border-radius: 8px;
+            padding: 10px;
+            width: 220px; /* Reducido de 300px a 220px */
+            background-color: rgba(5, 1, 15, 0.75);
+            color: #e0eaff;
+            box-shadow: 0 0 8px #60a5faaa;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+        }
+
+        article.producto:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 12px #60a5faee;
+        }
+
+        article.producto img {
+            width: 100%;
+            height: 140px; /* Reducido de 180px a 140px */
+            object-fit: cover;
+            background-color: #111a33;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        article.producto h3 {
+            margin: 0 0 6px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.1rem; /* Ligeramente reducido */
+        }
+
+        article.producto label {
+            font-weight: 500;
+            font-size: 0.85rem; /* Reducido */
+            margin-top: 4px;
+            color: #c9d9ff;
+        }
+
+        article.producto select, 
+        article.producto input[type="text"] {
+            width: 100%;
+            padding: 5px 7px;
+            margin-top: 2px;
+            border-radius: 4px;
+            border: 1px solid #60a5fa;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: border-color 0.3s ease;
+        }
+
+        article.producto select:focus,
+        article.producto input[type="text"]:focus {
+            outline: none;
+            border-color: #93c5fd;
+            box-shadow: 0 0 5px #93c5fd;
+        }
+
+        @media (max-width: 640px) {
+            main.catalogo {
+                justify-content: center;
+            }
+            article.producto {
+                width: 90%;
+            }
+            .filtros {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 10px;
+                max-width: 90%;
+                margin: 1rem auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li><a href="Parte_1.html">Inicio</a></li>
+        <li><a href="Parte_2.html" class="active">Productos</a></li>
+        <li><a href="Parte_3.html">Perfiles</a></li>
+        <li><a href="Parte_4.html">Carrito de Compra</a></li>
+        <li><a href="Parte_5.html">Pedidos</a></li>
+        <li><a href="Parte_6.html">Envíos</a></li>
+        <li><a href="Parte_7.html">Contacto</a></li>
+        <li><a href="Parte_8.html">Registrarse</a></li>
+    </ul>
+</nav>
+
+<div class="filtros">
+    <label for="filtro-tipo">Tipo:</label>
+    <select id="filtro-tipo">
+        <option value="todos">Todos</option>
+        <option value="cuadrada">Cuadrada</option>
+        <option value="circular">Circular</option>
+    </select>
+</div>
+
+<main class="catalogo" id="catalogo">
+
+    <!-- Producto 1 -->
+    <article class="producto" data-tipo="cuadrada">
+        <img src="https://i.pinimg.com/736x/85/9c/18/859c1830a3a5d25b7a241532d5bac8c2.jpg" alt="Torta Cuadrada 1" />
+        <h3>Torta Cuadrada de Chocolate</h3>
+        <label>
+            Tamaño:
+            <select>
+                <option>Pequeña</option>
+                <option>Mediana</option>
+                <option>Grande</option>
+            </select>
+        </label>
+        <label>
+            Mensaje especial:
+            <input type="text" placeholder="Ej: para ti paula " />
+        </label>
+    </article>
+
+    <!-- Producto 2 -->
+    <article class="producto" data-tipo="cuadrada">
+        <img src="https://i.pinimg.com/1200x/4a/b6/ed/4ab6eda94e2206d894eac609e4f31f89.jpg" alt="Torta Cuadrada 2" />
+        <h3>Torta Cuadrada de Vainilla</h3>
+        <label>
+            Tamaño:
+            <select>
+                <option>Pequeña</option>
+                <option>Mediana</option>
+                <option>Grande</option>
+            </select>
+        </label>
+        <label>
+            Mensaje especial:
+            <input type="text" placeholder="Ej: Te Amo" />
+        </label>
+    </article>
+
+    <!-- Producto 3 -->
+    <article class="producto" data-tipo="cuadrada">
+        <img src="https://i.pinimg.com/736x/51/4e/4b/514e4bbb7cc9484c29e9bd62f357b818.jpg" alt="Torta Cuadrada 3" />
+        <h3>Torta Cuadrada Tres Leches</h3>
+        <label>
+            Tamaño:
+            <select>
+                <option>Pequeña</option>
+                <option>Mediana</option>
+                <option>Grande</option>
+            </select>
+        </label>
+        <label>
+            Mensaje especial:
+            <input type="text" placeholder="gracias por ser mi novia " />
+        </label>
+    </article>
+
+    <!-- Producto 4 -->
+    <article class="producto" data-tipo="circular">
+        <img src="https://i.pinimg.com/736x/9d/30/90/9d3090c227a6038e9645319e3e007637.jpg" alt="Torta Circular 1" />
+        <h3>Torta Circular de Fresa</h3>
+        <label>
+            Tamaño:
+            <select>
+                <option>Pequeña</option>
+                <option>Mediana</option>
+                <option>Grande</option>
+            </select>
+        </label>
+        <label>
+            Mensaje especial:
+            <input type="text" placeholder="Ej: Gracias" />
+        </label>
+    </article>
+
+    <!-- Producto 5 -->
+    <article class="producto" data-tipo="circular">
+        <img src="https://i.pinimg.com/1200x/46/e8/05/46e805c284251da3effa242506381ec4.jpg" alt="Torta Circular 2" />
+        <h3>Torta Circular de Red Velvet</h3>
+        <label>
+            Tamaño:
+            <select>
+                <option>Pequeña</option>
+                <option>Mediana</option>
+                <option>Grande</option>
+            </select>
+        </label>
+        <label>
+            Mensaje especial:
+            <input type="text" placeholder="por todo lo que me das " />
+        </label>
+    </article>
+
+    <!-- Producto 6 -->
+    <article class="producto" data-tipo="circular">
+        <img src="https://i.pinimg.com/1200x/99/7c/b4/997cb41bdb52c98058165a0b8ec6de52.jpg" alt="Torta Circular 3" />
+        <h3>Torta Circular de Nutella</h3>
+        <label>
+            Tamaño:
+            <select>
+                <option>Pequeña</option>
+                <option>Mediana</option>
+                <option>Grande</option>
+            </select>
+        </label>
+        <label>
+            Mensaje especial:
+            <input type="text" placeholder="Ej: ¡Te quiero!" />
+        </label>
+    </article>
+
+</main>
+
+<script>
+    const filtroTipo = document.getElementById('filtro-tipo');
+    const productos = document.querySelectorAll('article.producto');
+
+    filtroTipo.addEventListener('change', () => {
+        const valor = filtroTipo.value;
+        productos.forEach(prod => {
+            if (valor === 'todos' || prod.dataset.tipo === valor) {
+                prod.style.display = 'flex';
+            } else {
+                prod.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
